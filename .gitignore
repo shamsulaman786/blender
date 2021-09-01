@@ -1,0 +1,35 @@
+addon_2_92.rar
+addon_2_93.py
+automat.py
+complex_fp_to_hall_with_mat_2_92.py
+complex_fp_to_hall_with_mat_addon_2_93.py
+complex_hall_maker.py
+floor_plan_mesh.py
+hall_wt_ceil_floor.py
+make_floor_plan.py
+make_hall_addon.py
+make_hall.py
+make_plane.py
+mat_backup.py
+mat.py
+otb.rar
+rectangle_addon.py
+taks_mesh copy.py
+taks_mesh.py
+task.py
+tempCodeRunnerFile.py
+unwrap.py
+otb/floor/4K_tiling_18_ambientocclusion.png
+otb/floor/4K_tiling_18_basecolor.png
+otb/floor/4K_tiling_18_height.png
+otb/floor/4K_tiling_18_metallic.png
+otb/floor/4K_tiling_18_normal.png
+otb/floor/4K_tiling_18_roughness.png
+otb/Wall & Ceiling/Material_738.png
+otb/Wall & Ceiling/Plaster_001_COLOR.jpg
+otb/Wall & Ceiling/Plaster_001_DISP.png
+otb/Wall & Ceiling/Plaster_001_NORM.jpg
+otb/Wall & Ceiling/Plaster_001_OCC.jpg
+otb/Wall & Ceiling/Plaster_001_ROUGH.jpg
+timecmd.bat
+*.pyc
