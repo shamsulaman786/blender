@@ -140,12 +140,29 @@ class OTB_OT_Apply_All_Op(Operator):
         extra_plane.name = str(halls) + '.Floor Skirt'  # object rename
         extra_plane.data.name = str(halls) + '.Floor Skirt'  # mesh rename
         skirt_object = bpy.data.objects['1.Floor Skirt']
-        bpy.ops.object.editmode_toggle()
-        bpy.ops.object.convert(target='CURVE')
         bpy.context.view_layer.objects.active = bpy.data.objects['1.Floor Skirt']
+        bpy.ops.mesh.separate(type='LOOSE')
+
+        floorSkirtObjects = []
+
+        for obj in bpy.data.objects:
+            if obj.name.find('Floor Skirt')>=0:
+                floorSkirtObjects.append(obj)
+
+        # #converting to curve
+        bpy.ops.object.editmode_toggle()
+
+        for obj in floorSkirtObjects:
+            bpy.ops.object.convert(target='CURVE')
         bpy.ops.transform.translate(value=(-0, -0, -1.5), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', constraint_axis=(False, False, True), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
         bpy.ops.object.duplicate_move(OBJECT_OT_duplicate={"linked":False, "mode":'TRANSLATION'}, TRANSFORM_OT_translate={"value":(0, 0, 3.0), "orient_type":'GLOBAL', "orient_matrix":((1, 0, 0), (0, 1, 0), (0, 0, 1)), "orient_matrix_type":'GLOBAL', "constraint_axis":(False, False, True), "mirror":True, "use_proportional_edit":False, "proportional_edit_falloff":'SMOOTH', "proportional_size":1, "use_proportional_connected":False, "use_proportional_projected":False, "snap":False, "snap_target":'CLOSEST', "snap_point":(0, 0, 0), "snap_align":False, "snap_normal":(0, 0, 0), "gpencil_strokes":False, "cursor_transform":False, "texture_space":False, "remove_on_cancel":False, "release_confirm":False, "use_accurate":False, "use_automerge_and_split":False})
-        bpy.data.objects['1.Floor Skirt.001'].name = '1.Ceil Skirt'
+        ceilSkirtObjects = bpy.context.selected_objects
+
+        #renaming ceil skirt objects
+        for i,obj in enumerate(ceilSkirtObjects):
+            obj.name = str(halls) + '.Ceil Skirt'
+            obj.name += '.00' + str(i) if i>0 else ''
+
       
         file_path = 'skirt.blend'
         inner_path = "Curve"
@@ -183,24 +200,27 @@ class OTB_OT_Apply_All_Op(Operator):
         self.init(root_dir, floor, ceil, wall)
         self.setTextureImage(texObjects)
         self.setMaterial(matObjects,halls)
-        self.doSkirting()
+        self.doSkirting(floorSkirtObjects, ceilSkirtObjects)
         return {'FINISHED'}
 
-    def doSkirting(self):
-        bpy.ops.object.select_all(action='DESELECT')
-        bpy.context.view_layer.objects.active = bpy.data.objects['1.Floor Skirt']        # bpy.context.space_data.context = 'DATA'
-        # bpy.data.objects['1.Floor Skirt'].select_set(True)
-        bpy.context.object.data.bevel_mode = 'OBJECT'
-        bpy.context.object.data.bevel_object = bpy.data.objects["floor_profile"]
+    def doSkirting(self,floorSkirtObjects, ceilSkirtObjects):
+        for fsObj in floorSkirtObjects:
+            bpy.ops.object.select_all(action='DESELECT')
+            bpy.context.view_layer.objects.active = fsObj        # bpy.context.space_data.context = 'DATA'
+            # bpy.data.objects['1.Floor Skirt'].select_set(True)
+            bpy.context.object.data.bevel_mode = 'OBJECT'
+            bpy.context.object.data.bevel_object = bpy.data.objects["floor_profile"]
+
         bpy.ops.object.select_all(action='DESELECT')
         bpy.data.objects['floor_profile'].select_set(True)
         bpy.ops.transform.resize(value=(0.01, 0.01, 0.01), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
 
-        bpy.ops.object.select_all(action='DESELECT')
-        bpy.context.view_layer.objects.active = bpy.data.objects['1.Ceil Skirt']        # bpy.context.space_data.context = 'DATA'
-        # bpy.data.objects['1.Ceil Skirt'].select_set(True)
-        bpy.context.object.data.bevel_mode = 'OBJECT'
-        bpy.context.object.data.bevel_object = bpy.data.objects["ceil_profile"]
+        for csObj in ceilSkirtObjects:
+            bpy.ops.object.select_all(action='DESELECT')
+            bpy.context.view_layer.objects.active = csObj        # bpy.context.space_data.context = 'DATA'
+            # bpy.data.objects['1.Ceil Skirt'].select_set(True)
+            bpy.context.object.data.bevel_mode = 'OBJECT'
+            bpy.context.object.data.bevel_object = bpy.data.objects["ceil_profile"]
         bpy.ops.object.select_all(action='DESELECT')
         bpy.data.objects['ceil_profile'].select_set(True)
         bpy.ops.transform.resize(value=(100, 100, 100), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
